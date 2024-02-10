@@ -13,7 +13,11 @@ public class PagamentoService {
     @Autowired
     PagamentoRepository pagamentoRepository;
 
-    public List<Pagamento> listarPagamentos(){
+    public List<Pagamento> listarTodosPagamentos(){
         return pagamentoRepository.findAll();
+    }
+
+    public void cadastrarPagamento(Pagamento pagamento){
+        pagamentoRepository.save(pagamento);
     }
 }
