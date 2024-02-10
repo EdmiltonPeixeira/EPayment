@@ -5,7 +5,7 @@ create table pagamentos (
     codigo_debito int not null,
     cpf_cnpj_pagador varchar(30) not null,
     metodo_pagamento varchar(30) not null,
-    numero_cartao varchar(30) not null,
+    numero_cartao varchar(30),
     valor_pagamento number not null,
 
     primary key(id)
