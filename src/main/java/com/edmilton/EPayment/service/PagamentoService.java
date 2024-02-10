@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.edmilton.EPayment.model.Pagamento;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -73,5 +74,23 @@ public class PagamentoService {
             e.printStackTrace();
         }
         return ResponseEntity.ok().body(mensagem);
+    }
+
+    public List<Pagamento> buscarPorFiltros(Integer codigoDebito, String cpfCnpjPagador, String status){
+        List<Pagamento> pagamentos = new ArrayList<>();
+        if(Objects.nonNull(codigoDebito) && Objects.nonNull(cpfCnpjPagador) && Objects.nonNull(status)){
+            pagamentos = pagamentoRepository.findPagamentosByCodigoDebitoAndCpfCnpjPagadorAndStatus(codigoDebito, cpfCnpjPagador, StatusPagamento.valueOf(status));
+        } else if(Objects.nonNull(codigoDebito) && Objects.nonNull(cpfCnpjPagador) && Objects.isNull(status)){
+            pagamentos = pagamentoRepository.findPagamentosByCodigoDebitoAndCpfCnpjPagador(codigoDebito, cpfCnpjPagador);
+        } else if(Objects.nonNull(codigoDebito) && Objects.isNull(cpfCnpjPagador) && Objects.nonNull(status)){
+            pagamentos = pagamentoRepository.findPagamentosByCodigoDebitoAndStatus(codigoDebito, StatusPagamento.valueOf(status));
+        } else if(Objects.nonNull(codigoDebito) && Objects.isNull(cpfCnpjPagador) && Objects.isNull(status)){
+            pagamentos = pagamentoRepository.findPagamentosByCodigoDebito(codigoDebito);
+        } else if(Objects.isNull(codigoDebito) && Objects.nonNull(cpfCnpjPagador) && Objects.isNull(status)){
+            pagamentos = pagamentoRepository.findPagamentosByCpfCnpjPagador(cpfCnpjPagador);
+        } else if(Objects.isNull(codigoDebito) && Objects.isNull(cpfCnpjPagador) && Objects.nonNull(status)){
+            pagamentos = pagamentoRepository.findPagamentosByStatus(StatusPagamento.valueOf(status));
+        }
+        return pagamentos;
     }
 }

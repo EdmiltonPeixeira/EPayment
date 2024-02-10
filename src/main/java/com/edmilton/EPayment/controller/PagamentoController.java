@@ -17,12 +17,11 @@ public class PagamentoController {
     @Autowired
     PagamentoService pagamentoService;
 
-    @GetMapping
+    @GetMapping("/todos")
     @ResponseStatus(HttpStatus.OK)
     public List<Pagamento> listarTodos(){
         return pagamentoService.listarTodosPagamentos();
     }
-
 
     @PostMapping
     public ResponseEntity<String> cadastrar(@RequestBody Pagamento pagamento){
@@ -32,5 +31,13 @@ public class PagamentoController {
     @PutMapping
     public ResponseEntity<String> atualizar(@RequestBody AtualizaPagamentoDto atualizaPagamentoDto){
         return pagamentoService.alterarPagamento(atualizaPagamentoDto);
+    }
+
+    @GetMapping("/filtros")
+    public List<Pagamento> listarComFiltros(
+            @RequestParam(name = "codigoDebito", required = false) Integer codigoDebito,
+            @RequestParam(name = "cpfCnpjPagador", required = false) String cpfCnpjPagador,
+            @RequestParam(name = "status", required = false) String status){
+        return pagamentoService.buscarPorFiltros(codigoDebito, cpfCnpjPagador, status);
     }
 }
