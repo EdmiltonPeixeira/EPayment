@@ -39,7 +39,7 @@ public class PagamentoService {
         }
         pagamento.setStatus(StatusPagamento.PENDENTE_DE_PROCESSAMENTO);
         pagamentoRepository.save(pagamento);
-        return ResponseEntity.ok().body("Pagamento registrado com sucesso!");
+        return ResponseEntity.ok().body("Pagamento registrado com sucesso.");
     }
 
     public ResponseEntity<String> alterarPagamento(AtualizaPagamentoDto atualizaPagamentoDto) throws IllegalArgumentException{
@@ -48,26 +48,26 @@ public class PagamentoService {
             StatusPagamento novoStatus = StatusPagamento.valueOf(atualizaPagamentoDto.getStatus());
             Pagamento pagamento = pagamentoRepository.findPagamentoById(atualizaPagamentoDto.getId());
             if(pagamento.getStatus().equals(StatusPagamento.PROCESSADO_COM_SUCESSO)){
-                mensagem = "Pagamentos com status PROCESSADO COM SUCESSO não podem ser alterados.";
+                mensagem = "Pagamentos com status " + pagamento.getStatus() + " não podem ser alterados.";
             } else if(pagamento.getStatus().equals(StatusPagamento.PROCESSADO_COM_FALHA)){
                 if(novoStatus.equals(StatusPagamento.PROCESSADO_COM_SUCESSO)) {
-                    mensagem = "Pagamentos com status PROCESSADO COM FALHA podem ser " +
-                            "alterados apenas para PENDENTE DE PROCESSAMENTO";
+                    mensagem = "Pagamentos com status " + pagamento.getStatus() + " podem ser " +
+                            "alterados apenas para " + StatusPagamento.PENDENTE_DE_PROCESSAMENTO;
                 } else if (novoStatus.equals(pagamento.getStatus())){
-                    mensagem = "Pagamento não alterado porque o novo status é igual ao atual.";
+                    mensagem = "Pagamento não pode ser alterado porque o novo status é igual ao atual.";
                 } else {
                     pagamento.setStatus(novoStatus);
                     pagamentoRepository.save(pagamento);
-                    mensagem = "Pagamento alterado com sucesso!";
+                    mensagem = "Pagamento alterado com sucesso.";
                 }
             } else if(pagamento.getStatus().equals(StatusPagamento.PENDENTE_DE_PROCESSAMENTO)
                 && Arrays.stream(StatusPagamento.values()).toList().contains(novoStatus)){
                 if (novoStatus.equals(pagamento.getStatus())) {
-                    mensagem = "Pagamento não alterado porque o novo status é igual ao atual.";
+                    mensagem = "Pagamento não pode ser alterado porque o novo status é igual ao atual.";
                 } else {
                     pagamento.setStatus(novoStatus);
                     pagamentoRepository.save(pagamento);
-                    mensagem = "Pagamento alterado com sucesso!";
+                    mensagem = "Pagamento alterado com sucesso.";
                 }
             }
         } catch (IllegalArgumentException e){
@@ -92,5 +92,15 @@ public class PagamentoService {
             pagamentos = pagamentoRepository.findPagamentosByStatus(StatusPagamento.valueOf(status));
         }
         return pagamentos;
+    }
+
+    public ResponseEntity<String> excluirPagamento(Integer idPagamento){
+        String mensagem = "";
+        Pagamento pagamento = pagamentoRepository.findPagamentoById(idPagamento);
+        if(pagamento.getStatus().equals(StatusPagamento.PENDENTE_DE_PROCESSAMENTO)){
+            pagamentoRepository.delete(pagamento);
+            mensagem = "Pagamento excluído com sucesso.";
+        } else mensagem = "Apenas pagamentos com status " + StatusPagamento.PENDENTE_DE_PROCESSAMENTO + " podem ser excluídos.";
+        return ResponseEntity.ok().body(mensagem);
     }
 }

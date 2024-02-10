@@ -6,6 +6,7 @@ import com.edmilton.EPayment.service.PagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +25,13 @@ public class PagamentoController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<String> cadastrar(@RequestBody Pagamento pagamento){
         return pagamentoService.cadastrarPagamento(pagamento);
     }
 
     @PutMapping
+    @Transactional
     public ResponseEntity<String> atualizar(@RequestBody AtualizaPagamentoDto atualizaPagamentoDto){
         return pagamentoService.alterarPagamento(atualizaPagamentoDto);
     }
@@ -39,5 +42,11 @@ public class PagamentoController {
             @RequestParam(name = "cpfCnpjPagador", required = false) String cpfCnpjPagador,
             @RequestParam(name = "status", required = false) String status){
         return pagamentoService.buscarPorFiltros(codigoDebito, cpfCnpjPagador, status);
+    }
+
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity<String> excluir(@RequestParam(name = "idPagamento", required = false) Integer idPagamento){
+        return pagamentoService.excluirPagamento(idPagamento);
     }
 }
