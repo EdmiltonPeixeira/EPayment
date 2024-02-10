@@ -27,4 +27,7 @@ public class Pagamento {
     private String numeroCartao;
 
     private BigDecimal valorPagamento;
+
+    @Enumerated(EnumType.STRING)
+    private StatusPagamento status;
 }
