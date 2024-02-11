@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "1289b321-ac21-4147-a2f7-28ef37964e8f",
+		"name": "epayment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27353226"
+	},
+	"item": [
+		{
+			"name": "Pagamentos",
+			"item": [
+				{
+					"name": "Listar todos os pagamentos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/pagamentos/todos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pagamentos",
+								"todos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar um pagamento",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"codigoDebito\": \"577\",\r\n    \"cpfCnpjPagador\": \"11122233344\",\r\n    \"metodoPagamento\": \"CARTAO_CREDITO\",\r\n    \"numeroCartao\": \"4447778889933\",\r\n    \"valorPagamento\": \"4333.66\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/pagamentos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pagamentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar pagamento",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"status\": \"PENDENTE_DE_PROCESSAMENTO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/pagamentos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pagamentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar com filtros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/pagamentos/filtros?codigoDebito=259&cpfCnpjPagador=11122233344&status=PENDENTE_DE_PROCESSAMENTO",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pagamentos",
+								"filtros"
+							],
+							"query": [
+								{
+									"key": "codigoDebito",
+									"value": "259"
+								},
+								{
+									"key": "cpfCnpjPagador",
+									"value": "11122233344"
+								},
+								{
+									"key": "status",
+									"value": "PENDENTE_DE_PROCESSAMENTO"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Exclusão de pagamento",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/pagamentos?idPagamento=2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pagamentos"
+							],
+							"query": [
+								{
+									"key": "idPagamento",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:8080/epayment",
+			"type": "string"
+		}
+	]
+}
